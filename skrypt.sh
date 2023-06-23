@@ -1,55 +1,29 @@
 #!/bin/bash
 
-print_date() {
-  date
-}
-
-create_gitignore() {
-  echo "*log*" > .gitignore
-}
-
-create_logs() {
-  for ((i=1; i<=100; i++)); do
-    echo "Nazwa pliku: log${i}.txt" > log${i}.txt
-    echo "Nazwa skryptu: $0" >> log${i}.txt
-    echo "Data: $(date)" >> log${i}.txt
-  done
-}
-
-create_logs_with_count() {
-  local count=$1
-  for ((i=1; i<=count; i++)); do
-    echo "Nazwa pliku: log${i}.txt" > log${i}.txt
-    echo "Nazwa skryptu: $0" >> log${i}.txt
-    echo "Data: $(date)" >> log${i}.txt
-  done
-}
-
-show_help() {
-  echo "Dostępne opcje:"
-  echo "--date : Wyświetla dzisiejszą datę"
-  echo "--logs : Tworzy 100 plików logx.txt"
-  echo "--logs <liczba> : Tworzy określoną liczbę plików logx.txt"
-  echo "--help : Wyświetla pomoc"
-}
-
-if [[ $# -eq 0 ]]; then
-  echo "Nie podano żadnej flagi. Użyj --help, aby zobaczyć dostępne opcje."
-  exit 1
+if [[ $1 == "--date" ]]; then
+    echo $(date)
 fi
 
-if [[ "$1" == "--date" ]]; then
-  print_date
+for ((i=1; i<=100; i++)); do
+    echo "Nazwa pliku: log$i.txt" > log$i.txt
+    echo "Nazwa skryptu: skrypt.sh" >> log$i.txt
+    echo "Data: $(date)" >> log$i.txt
+done
+
+if [[ $1 == "--logs" && ! -z $2 ]]; then
+    num_files=$2
+    for ((i=1; i<=num_files; i++)); do
+        echo "Nazwa pliku: log$i.txt" > log$i.txt
+        echo "Nazwa skryptu: skrypt.sh" >> log$i.txt
+        echo "Data: $(date)" >> log$i.txt
+    done
 fi
 
-if [[ "$1" == "--logs" ]]; then
-  if [[ "$2" =~ ^[0-9]+$ ]]; then
-    create_logs_with_count "$2"
-  else
-    create_logs
-  fi
+if [[ $1 == "--help" ]]; then
+    echo "Dostępne opcje:"
+    echo "--date - wyświetla dzisiejszą datę"
+    echo "--logs - tworzy 100 plików logx.txt"
+    echo "--logs [liczba] - tworzy określoną liczbę plików logx.txt"
+    echo "--help - wyświetla wszystkie dostępne opcje"
 fi
 
-if [[ "$1" == "--help" ]]; then
-  show_help
-fi
