@@ -54,4 +54,5 @@ case "$1" in
     git merge "$branch_name"
     shift
 ;;
+#test
 esac   
